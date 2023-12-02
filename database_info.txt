@@ -1,0 +1,8 @@
+ip_address: 172.232.171.163:3306
+database_name: hiking_app_db
+
+username: developer
+password: bE5OgL69GkQ0
+
+username: client
+password: t817SrtK6Z2Y
