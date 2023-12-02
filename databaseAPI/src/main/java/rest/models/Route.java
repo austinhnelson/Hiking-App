@@ -1,52 +1,42 @@
 package rest.models;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "user_posts")
-public class UserPost {
+@DatabaseTable(tableName = "routes")
+public class Route {
 
     @DatabaseField(generatedId = true)
     private int id;
 
     @DatabaseField
-    private String username;
+    private String name;
 
-    @DatabaseField
-    private int routeID;
+    @DatabaseField(dataType = DataType.LONG_STRING)
+    private String points;
 
-    @DatabaseField
-    private String comment;
-
-    public UserPost() {
+    public Route() {
         // ORMLite needs a no-arg constructor
     }
 
     public int getId() {
-        return this.id;
+        return id;
     }
 
-    public String getUsername() {
-        return this.username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getRouteID() {
-        return routeID;
+    public String getPoints() {
+        return points;
     }
 
-    public void setRouteID(int routeID) {
-        this.routeID = routeID;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setPoints(String points) {
+        this.points = points;
     }
 }

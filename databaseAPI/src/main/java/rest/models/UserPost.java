@@ -3,8 +3,8 @@ package rest.models;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable(tableName = "users")
-public class User {
+@DatabaseTable(tableName = "user_posts")
+public class UserPost {
 
     @DatabaseField(generatedId = true)
     private int id;
@@ -13,14 +13,17 @@ public class User {
     private String username;
 
     @DatabaseField
-    private String email;
+    private int routeID;
 
-    public User() {
+    @DatabaseField
+    private String comment;
+
+    public UserPost() {
         // ORMLite needs a no-arg constructor
     }
 
     public int getId() {
-        return this.id;
+        return id;
     }
 
     public String getUsername() {
@@ -31,11 +34,19 @@ public class User {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
+    public int getRouteID() {
+        return routeID;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setRouteID(int routeID) {
+        this.routeID = routeID;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }
