@@ -4,7 +4,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import rest.models.Route;
+import rest.models.MapRoute;
 import rest.models.UserPost;
 import com.google.gson.Gson;
 
@@ -23,10 +23,10 @@ public class App {
         connectionSource.setPassword("bE5OgL69GkQ0");
 
         Dao<UserPost, Integer> userPostDao = DaoManager.createDao(connectionSource, UserPost.class);
-        Dao<Route, Integer> routeDao = DaoManager.createDao(connectionSource, Route.class);
+        Dao<MapRoute, Integer> routeDao = DaoManager.createDao(connectionSource, MapRoute.class);
 
         TableUtils.createTableIfNotExists(connectionSource, UserPost.class);
-        TableUtils.createTableIfNotExists(connectionSource, Route.class);
+        TableUtils.createTableIfNotExists(connectionSource, MapRoute.class);
 
         Gson gson = new Gson();
 
@@ -51,37 +51,39 @@ public class App {
             String name = req.queryParams("name");
             String points = req.queryParams("points");
 
-            Route route = new Route();
+            MapRoute route = new MapRoute();
             route.setName(name);
             route.setPoints(points);
 
             routeDao.create(route);
-            List<Route> resultList = routeDao.queryForMatchingArgs(route);
+            List<MapRoute> resultList = routeDao.queryForMatchingArgs(route);
             if (resultList.size() == 0) throw new RuntimeException("unable to add route");
             res.status(201); // 201 Created
             return resultList.get(resultList.size() - 1).getId();
         });
 
-        get("/userPost", (req, res) -> {
-            UserPost post = userPostDao.queryForId(Integer.parseInt(req.queryParams("id")));
+        get("/userPost/:id", (req, res) -> {
+            UserPost post = userPostDao.queryForId(Integer.parseInt(req.params(":id")));
             if (post != null) {
                 res.type("application/json");
-                return gson.toJson(post, UserPost.class);
+                return post;
             } else {
                 res.status(404); // 404 Not found
                 return "post not found";
             }
-        });
+        }, gson::toJson);
 
-        get("/route", (req, res) -> {
-            Route route = routeDao.queryForId(Integer.parseInt(req.queryParams("id")));
+        get("/route/:id", (req, res) -> {
+            MapRoute route = routeDao.queryForId(Integer.parseInt(req.params(":id")));
             if (route != null) {
                 res.type("application/json");
-                return gson.toJson(route, Route.class);
+                return route;
             } else {
                 res.status(404); // 404 Not found
                 return "route not found";
             }
-        });
+        }, gson::toJson);
+
+        after((request, response) -> response.header("Content-Encoding", "gzip"));
     }
 }
