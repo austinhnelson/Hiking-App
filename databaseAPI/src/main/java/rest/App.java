@@ -62,8 +62,8 @@ public class App {
             return resultList.get(resultList.size() - 1).getId();
         });
 
-        get("/userPost/:id", (req, res) -> {
-            UserPost post = userPostDao.queryForId(Integer.parseInt(req.params(":id")));
+        get("/userPost", (req, res) -> {
+            UserPost post = userPostDao.queryForId(Integer.parseInt(req.queryParams("id")));
             if (post != null) {
                 res.type("application/json");
                 return gson.toJson(post, UserPost.class);
@@ -73,8 +73,8 @@ public class App {
             }
         });
 
-        get("/route/:id", (req, res) -> {
-            Route route = routeDao.queryForId(Integer.parseInt(req.params(":id")));
+        get("/route", (req, res) -> {
+            Route route = routeDao.queryForId(Integer.parseInt(req.queryParams("id")));
             if (route != null) {
                 res.type("application/json");
                 return gson.toJson(route, Route.class);
