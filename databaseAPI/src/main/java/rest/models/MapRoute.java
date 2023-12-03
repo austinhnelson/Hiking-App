@@ -5,7 +5,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "routes")
-public class Route {
+public class MapRoute {
 
     @DatabaseField(generatedId = true)
     private int id;
@@ -16,7 +16,7 @@ public class Route {
     @DatabaseField(dataType = DataType.LONG_STRING)
     private String points;
 
-    public Route() {
+    public MapRoute() {
         // ORMLite needs a no-arg constructor
     }
 
