@@ -8,19 +8,19 @@ To edit an existing table, the existing table will need to be dropped from the d
 structure will be created.
 
 Inserting to a table:
-POST http://172.232.171.163/TABLE_NAME_OR_ALIAS?PARAMETER_NAME=VALUE&PARAMETER_2=...
+POST http://172.232.171.163:4567/TABLE_NAME_OR_ALIAS?PARAMETER_NAME=VALUE&PARAMETER_2=...
 
 e.g.
-POST http://172.232.171.163/route?name=my_route&points=jsonData
-POST http://172.232.171.163/userPost?username=my_name&routeID=1&comment=something+about+the+hike
+POST http://172.232.171.163:4567/route?name=my_route&points=jsonData
+POST http://172.232.171.163:4567/userPost?username=my_name&routeID=1&comment=something+about+the+hike
 
 The response content will be the id assigned to the entry (useful for lookup and such).
 Spaces in string values must be replaced with +'s (%20 may also work)
 
 Retrieving from a table:
-GET http://172.232.171.163/TABLE_NAME_OR_ALIAS/ID
+GET http://172.232.171.163:4567/TABLE_NAME_OR_ALIAS/ID
 
 e.g.
-GET http://172.232.171.163/user_posts/1
+GET http://172.232.171.163:4567/user_posts/1
 
 The response content will be JSON data
