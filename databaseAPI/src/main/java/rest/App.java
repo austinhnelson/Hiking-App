@@ -63,26 +63,37 @@ public class App {
         });
 
         get("/userPost/:id", (req, res) -> {
-            UserPost post = userPostDao.queryForId(Integer.parseInt(req.params(":id")));
+            res.type("application/json");
+            String id = req.params(":id");
+            if (id.equals("all")) return userPostDao.queryForAll();
+            UserPost post = userPostDao.queryForId(Integer.parseInt(id));
             if (post != null) {
-                res.type("application/json");
                 return post;
             } else {
                 res.status(404); // 404 Not found
-                return "post not found";
+                return "";
             }
         }, gson::toJson);
 
         get("/route/:id", (req, res) -> {
-            MapRoute route = routeDao.queryForId(Integer.parseInt(req.params(":id")));
+            res.type("application/json");
+            String id = req.params(":id");
+            if (id.equals("all")) return routeDao.queryForAll();
+            MapRoute route = routeDao.queryForId(Integer.parseInt(id));
             if (route != null) {
-                res.type("application/json");
                 return route;
             } else {
                 res.status(404); // 404 Not found
-                return "route not found";
+                return "";
             }
         }, gson::toJson);
+
+        get("/userPost", (req, res) -> {
+            res.type("application/json");
+            String username = req.queryParams("username");
+            return userPostDao.queryForEq("username", username);
+        }, gson::toJson);
+
 
         after((request, response) -> response.header("Content-Encoding", "gzip"));
     }
