@@ -21,6 +21,13 @@ Retrieving from a table:
 GET http://172.232.171.163:4567/TABLE_NAME_OR_ALIAS/ID
 
 e.g.
-GET http://172.232.171.163:4567/user_posts/1
+GET http://172.232.171.163:4567/userPosts/1
 
 The response content will be JSON data
+
+To get all, replace ID with 'all'
+e.g.
+GET http://172.232.171.163:4567/userPosts/all
+
+To get all posts by a specific user:
+GET http://172.232.171.163:4567/userPosts?username=USERNAME
