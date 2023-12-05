@@ -1,7 +1,12 @@
-const URI = '172.232.171.163:4567';
+const URI = 'http://172.232.171.163:4567';
+
+async function loadPosts() {
+    const response = await fetch(URI + '/userPost/all', {headers: {'Content-Type': 'application/json'}});
+    return response.json();
+}
 
 async function loadPost(postID) {
-    const response = await fetch(URI + '/userPost/' + postID);
+    const response = await fetch(URI + '/userPost/' + postID, {headers: {'Content-Type': 'application/json'}});
     return response.json();
 }
 
@@ -25,10 +30,12 @@ async function loadRoute(routeID) {
 }
 
 async function loadRoutesByUser(username){
-    const posts = await loadPostsByUser();
-    return posts.map(async post => {
-        await loadRoute(post.routeID());
-    });
+    const posts = await loadPostsByUser(username);
+    let routes = [];
+    for (let i = 0; i < posts.length; i++) {
+        routes.push(await loadRoute(posts[i].routeID));
+    }
+    return routes;
 }
 
 async function saveRoute(name, points) {
@@ -38,6 +45,9 @@ async function saveRoute(name, points) {
 }
 
 export {loadPost};
+export {loadPosts};
+export {loadPostsByUser};
 export {savePost};
 export {loadRoute};
+export {loadRoutesByUser};
 export {saveRoute};
