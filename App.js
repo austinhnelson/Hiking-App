@@ -1,4 +1,3 @@
-import {StatusBar} from 'expo-status-bar';
 import {Button, SafeAreaView, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import * as RemoteAccess from './components/RemoteAccess';
 import {Buttons, Colors} from './styles/index'
@@ -12,38 +11,35 @@ export default function App() {
         //RemoteAccess.loadRoutesByUser('my name').then(value => console.log(value));
     };*/
 
-    const doNothing = () => {};
-
-    const MyButton = (text, onPress) => {
-        return (
-            <View style={styles.button}>
-                <TouchableHighlight onPress={onPress}>
-                    <Text style={styles.text}>{text}</Text>
-                </TouchableHighlight>
-            </View>
-        );
+    const doNothing = () => {
     };
 
-    const TopBar = (
-        <View style={styles.buttonBar}>
-            {MyButton('T1', doNothing)}
+    const MyButton = ({ text, onPress }) => (
+        <TouchableHighlight style={styles.button} onPress={onPress}>
+            <Text style={styles.text}>{text}</Text>
+        </TouchableHighlight>
+    );
+
+
+    const renderTopBar = (
+        <View style={[styles.buttonBar, {justifyContent: 'flex-end'}]}>
+            {MyButton({text: 'T1', onPress: doNothing})}
         </View>
     );
 
-    const BottomBar = (
+    const renderBottomBar = (
         <View style={styles.buttonBar}>
-            {MyButton('B1', doNothing)}
-            {MyButton('B2', doNothing)}
-            {MyButton('B3', doNothing)}
+            {MyButton({text: 'B1', onPress: doNothing})}
+            {MyButton({text: 'B2', onPress: doNothing})}
+            {MyButton({text: 'B3', onPress: doNothing})}
         </View>
     );
 
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar style="auto"/>
-            {TopBar}
+            {renderTopBar}
             <View style={styles.screen}></View>
-            {BottomBar}
+            {renderBottomBar}
         </SafeAreaView>
     );
 }
@@ -53,27 +49,26 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center',
     },
     button: {
-        flex: 1,
         ...Buttons.smallRounded,
+        backgroundColor: Colors.menuBar,
     },
     text: {
         color: Colors.black,
-        justifyContent: 'center'
+        fontSize: 24,
     },
     buttonBar: {
         flex: 1,
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        width: '100%',
         backgroundColor: Colors.menuBar,
     },
-    topBar:{
-        ...this.buttonBar,
-        direction: 'rtl',
-    },
-    screen:{
+    screen: {
         flex: 10,
+        width: '100%',
         backgroundColor: Colors.background,
     },
 });
