@@ -29,7 +29,7 @@ async function loadRoute(routeID) {
     return await response.json();
 }
 
-async function loadRoutesByUser(username){
+async function loadRoutesByUser(username) {
     const posts = await loadPostsByUser(username);
     let routes = [];
     for (let i = 0; i < posts.length; i++) {

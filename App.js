@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
-import {StatusBar} from 'expo-status-bar';
-import {Button, SafeAreaView, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {SafeAreaView, StatusBar, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
+import {useState} from "react";
+
 //import * as RemoteAccess from './components/RemoteAccess';
+
 import {Buttons, Colors} from './styles/index'
-import LoginScreen from './components/LoginScreen';
-import HomeScreen from './components/HomeScreen';
+
+import {LoginScreen} from './components/LoginScreen';
+import {HomeScreen} from "./components/HomeScreen";
+import {RecordScreen} from "./components/RecordingScreen";
+import {PersonalScreen} from "./components/PersonalScreen";
+import {SettingsScreen} from "./components/SettingsScreen";
 
 export default function App() {
     /*const clicked = () => {
@@ -16,41 +21,40 @@ export default function App() {
     };*/
 
     const [appState, setAppState] = useState('login');
+    const MyButton = ({text, onPress}) => (
+        <TouchableHighlight style={styles.button} onPress={onPress}>
+            <Text style={styles.text}>{text}</Text>
+        </TouchableHighlight>
+    );
 
-    const doNothing = () => {};
 
-    const MyButton = (text, onPress) => {
-        return (
-            <View style={styles.button}>
-                <TouchableHighlight onPress={onPress}>
-                    <Text style={styles.text}>{text}</Text>
-                </TouchableHighlight>
-            </View>
-        );
-    };
 
-    const TopBar = (
-        <View style={styles.buttonBar}>
-            {MyButton('T1', doNothing)}
+    const renderTopBar = (
+        <View style={[styles.buttonBar, {justifyContent: 'flex-end'}]}>
+            {MyButton({text: 'T1', onPress: () => setAppState('settings')})}
         </View>
     );
 
-    const BottomBar = (
+    const renderBottomBar = (
         <View style={styles.buttonBar}>
-            {MyButton('B1', doNothing)}
-            {MyButton('B2', doNothing)}
-            {MyButton('B3', doNothing)}
+            {MyButton({text: 'B1', onPress: () => setAppState('home')})}
+            {MyButton({text: 'B2', onPress: () => setAppState('record')})}
+            {MyButton({text: 'B3', onPress: () => setAppState('personal')})}
         </View>
     );
 
     const renderScreen = () => { 
       switch(appState) {
         case 'login':
-          return <LoginScreen />
-        case 'home-screen':
-          return (
-            <HomeScreen />  
-          );
+          return LoginScreen();
+        case 'home':
+            return HomeScreen();
+        case 'record':
+            return RecordScreen();
+        case 'personal':
+            return PersonalScreen();
+        case 'settings':
+            return SettingsScreen();
         default: 
           return null;
       }
@@ -61,7 +65,7 @@ export default function App() {
         <StatusBar style="auto" />
   
         {/* Conditionally render TopBar only when the state is NOT 'login' */}
-        {appState !== 'login' && TopBar}
+        {appState !== 'login' && renderTopBar}
   
         <View style={styles.screen}>
           {/* Render the screen based on the current state */}
@@ -69,7 +73,7 @@ export default function App() {
         </View>
   
         {/* Conditionally render BottomBar only when the state is NOT 'login' */}
-        {appState !== 'login' && BottomBar}
+        {appState !== 'login' && renderBottomBar}
       </SafeAreaView>
     );
 }
@@ -79,26 +83,24 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center',
     },
     button: {
-        flex: 1,
         ...Buttons.smallRounded,
+        backgroundColor: Colors.menuBar,
     },
     text: {
         color: Colors.black,
-        justifyContent: 'center'
+        fontSize: 24,
     },
     buttonBar: {
         flex: 1,
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        width: '100%',
         backgroundColor: Colors.menuBar,
     },
-    topBar:{
-        ...this.buttonBar,
-        direction: 'rtl',
-    },
-    screen:{
+    screen: {
         flex: 10,
         width: '100%',
         backgroundColor: Colors.background,
