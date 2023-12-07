@@ -16,16 +16,17 @@ export default function App() {
 
     const MyButton = (text, onPress) => {
         return (
-            <TouchableHighlight style={styles.button} onPress={onPress}>
-                <Text style={styles.text}>{text}</Text>
-            </TouchableHighlight>
+            <View style={styles.button}>
+                <TouchableHighlight onPress={onPress}>
+                    <Text style={styles.text}>{text}</Text>
+                </TouchableHighlight>
+            </View>
         );
     };
 
     const TopBar = (
         <View style={styles.buttonBar}>
             {MyButton('T1', doNothing)}
-            {MyButton('T2', doNothing)}
         </View>
     );
 
@@ -33,6 +34,7 @@ export default function App() {
         <View style={styles.buttonBar}>
             {MyButton('B1', doNothing)}
             {MyButton('B2', doNothing)}
+            {MyButton('B3', doNothing)}
         </View>
     );
 
@@ -59,11 +61,16 @@ const styles = StyleSheet.create({
     },
     text: {
         color: Colors.black,
+        justifyContent: 'center'
     },
     buttonBar: {
         flex: 1,
         flexDirection: 'row',
         backgroundColor: Colors.menuBar,
+    },
+    topBar:{
+        ...this.buttonBar,
+        direction: 'rtl',
     },
     screen:{
         flex: 10,
