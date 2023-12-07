@@ -4,7 +4,7 @@ const base = {
 };
 export const small = {
     paddingHorizontal: 10,
-    paddingVertical: 10 ,
+    paddingVertical: 10,
     width: 65,
     height: 65,
 };
