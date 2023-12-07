@@ -1,7 +1,11 @@
 import {SafeAreaView, StatusBar, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
-import * as RemoteAccess from './components/RemoteAccess';
-import {Buttons, Colors} from './styles/index'
 import {useState} from "react";
+
+//import * as RemoteAccess from './components/RemoteAccess';
+
+import {Buttons, Colors} from './styles/index'
+
+import {LoginScreen} from './components/LoginScreen';
 import {HomeScreen} from "./components/HomeScreen";
 import {RecordScreen} from "./components/RecordingScreen";
 import {PersonalScreen} from "./components/PersonalScreen";
@@ -15,8 +19,8 @@ export default function App() {
         RemoteAccess.loadRoute(1).then(value => alert(value.points));
         //RemoteAccess.loadRoutesByUser('my name').then(value => console.log(value));
     };*/
-    const [currentView, setCurrentView] = useState('home');
 
+    const [appState, setAppState] = useState('login');
     const MyButton = ({text, onPress}) => (
         <TouchableHighlight style={styles.button} onPress={onPress}>
             <Text style={styles.text}>{text}</Text>
@@ -24,44 +28,53 @@ export default function App() {
     );
 
 
+
     const renderTopBar = (
         <View style={[styles.buttonBar, {justifyContent: 'flex-end'}]}>
-            {MyButton({text: 'T1', onPress: () => setCurrentView('settings')})}
+            {MyButton({text: 'T1', onPress: () => setAppState('settings')})}
         </View>
     );
 
     const renderBottomBar = (
         <View style={styles.buttonBar}>
-            {MyButton({text: 'B1', onPress: () => setCurrentView('home')})}
-            {MyButton({text: 'B2', onPress: () => setCurrentView('record')})}
-            {MyButton({text: 'B3', onPress: () => setCurrentView('personal')})}
+            {MyButton({text: 'B1', onPress: () => setAppState('home')})}
+            {MyButton({text: 'B2', onPress: () => setAppState('record')})}
+            {MyButton({text: 'B3', onPress: () => setAppState('personal')})}
         </View>
     );
 
-    const renderCurrentView = () => {
-        switch (currentView) {
-            case 'home':
-                return HomeScreen();
-            case 'record':
-                return RecordScreen();
-            case 'personal':
-                return PersonalScreen();
-            case 'settings':
-                return SettingsScreen();
-            default:
-                return HomeScreen();
-        }
-    };
+    const renderScreen = () => { 
+      switch(appState) {
+        case 'login':
+          return <LoginScreen />
+        case 'home':
+            return HomeScreen();
+        case 'record':
+            return RecordScreen();
+        case 'personal':
+            return PersonalScreen();
+        case 'settings':
+            return SettingsScreen();
+        default: 
+          return null;
+      }
+    }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar barStyle='default'/>
-            {renderTopBar}
-            <View style={styles.screen}>
-                {renderCurrentView()}
-            </View>
-            {renderBottomBar}
-        </SafeAreaView>
+      <SafeAreaView style={styles.container}>
+        <StatusBar style="auto" />
+  
+        {/* Conditionally render TopBar only when the state is NOT 'login' */}
+        {appState !== 'login' && TopBar}
+  
+        <View style={styles.screen}>
+          {/* Render the screen based on the current state */}
+          {renderScreen()}
+        </View>
+  
+        {/* Conditionally render BottomBar only when the state is NOT 'login' */}
+        {appState !== 'login' && BottomBar}
+      </SafeAreaView>
     );
 }
 
