@@ -1,7 +1,10 @@
+import React, { useState } from 'react';
 import {StatusBar} from 'expo-status-bar';
 import {Button, SafeAreaView, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
-import * as RemoteAccess from './components/RemoteAccess';
+//import * as RemoteAccess from './components/RemoteAccess';
 import {Buttons, Colors} from './styles/index'
+import LoginScreen from './components/LoginScreen';
+import HomeScreen from './components/HomeScreen';
 
 export default function App() {
     /*const clicked = () => {
@@ -11,6 +14,8 @@ export default function App() {
         RemoteAccess.loadRoute(1).then(value => alert(value.points));
         //RemoteAccess.loadRoutesByUser('my name').then(value => console.log(value));
     };*/
+
+    const [appState, setAppState] = useState('login');
 
     const doNothing = () => {};
 
@@ -38,13 +43,34 @@ export default function App() {
         </View>
     );
 
+    const renderScreen = () => { 
+      switch(appState) {
+        case 'login':
+          return <LoginScreen />
+        case 'home-screen':
+          return (
+            <HomeScreen />  
+          );
+        default: 
+          return null;
+      }
+    }
+
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar style="auto"/>
-            {TopBar}
-            <View style={styles.screen}></View>
-            {BottomBar}
-        </SafeAreaView>
+      <SafeAreaView style={styles.container}>
+        <StatusBar style="auto" />
+  
+        {/* Conditionally render TopBar only when the state is NOT 'login' */}
+        {appState !== 'login' && TopBar}
+  
+        <View style={styles.screen}>
+          {/* Render the screen based on the current state */}
+          {renderScreen()}
+        </View>
+  
+        {/* Conditionally render BottomBar only when the state is NOT 'login' */}
+        {appState !== 'login' && BottomBar}
+      </SafeAreaView>
     );
 }
 
@@ -74,6 +100,7 @@ const styles = StyleSheet.create({
     },
     screen:{
         flex: 10,
+        width: '100%',
         backgroundColor: Colors.background,
     },
 });
