@@ -3,12 +3,11 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
 
-const LoginScreen = () => {
+export const LoginScreen = () => {
   const [mode, setMode] = useState("login");
 
   const handleLoginView = () => {
@@ -20,7 +19,7 @@ const LoginScreen = () => {
   };
 
   const renderContent = () => {
-    if (mode == "login") {
+    if (mode === "login") {
       return (
         <>
           <Text style={styles.inputTitle}>Username</Text>
@@ -140,5 +139,3 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
-
-export default LoginScreen;

@@ -46,7 +46,7 @@ export default function App() {
     const renderScreen = () => { 
       switch(appState) {
         case 'login':
-          return <LoginScreen />
+          return LoginScreen();
         case 'home':
             return HomeScreen();
         case 'record':
@@ -65,7 +65,7 @@ export default function App() {
         <StatusBar style="auto" />
   
         {/* Conditionally render TopBar only when the state is NOT 'login' */}
-        {appState !== 'login' && TopBar}
+        {appState !== 'login' && renderTopBar}
   
         <View style={styles.screen}>
           {/* Render the screen based on the current state */}
@@ -73,7 +73,7 @@ export default function App() {
         </View>
   
         {/* Conditionally render BottomBar only when the state is NOT 'login' */}
-        {appState !== 'login' && BottomBar}
+        {appState !== 'login' && renderBottomBar}
       </SafeAreaView>
     );
 }
