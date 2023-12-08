@@ -20,7 +20,7 @@ export default function App() {
         //RemoteAccess.loadRoutesByUser('my name').then(value => console.log(value));
     };*/
 
-    const [appState, setAppState] = useState('login');
+    const [appState, setAppState] = useState('record');
     const MyButton = ({text, onPress}) => (
         <TouchableHighlight style={styles.button} onPress={onPress}>
             <Text style={styles.text}>{text}</Text>
