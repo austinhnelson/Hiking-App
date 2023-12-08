@@ -1,8 +1,9 @@
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {Colors} from '../styles/index';
 import MapView, {Marker, Polyline} from "react-native-maps";
 
 function calculateDistance(coords) {
+    if(coords === null || coords.length < 2) return 0;
     let distance = 0;
     //// Haversine formula ////
     // Radius of earth in miles
@@ -25,7 +26,7 @@ function calculateDistance(coords) {
 
 export const RecordScreen = ({locations, mapRef}) => {
     let latestCoords;
-    let distance = 0;
+    let distance;
 
     if (locations.length > 0 && mapRef.current) {
         latestCoords = locations[locations.length - 1].coords;
@@ -35,14 +36,15 @@ export const RecordScreen = ({locations, mapRef}) => {
             latitudeDelta: 0.005,
             longitudeDelta: 0.005,
         }, 1500);
-        if(locations.length > 1){
-            distance = calculateDistance(locations.map(l=>(l.coords)));
-            console.log('distance: ' + distance.toPrecision(3) + 'mi');
-        }
     }
     return (
         <View style={styles.view}>
-            <MapView style={styles.map} ref={mapRef}>
+            <View style={{flex: 1}}>
+                <Text style={styles.text}>
+                    Distance: {calculateDistance(locations.map(l=>l.coords)).toPrecision(3)}mi
+                </Text>
+            </View>
+            <View style={{flex:10}}><MapView style={styles.map} ref={mapRef}>
                 <Polyline
                     coordinates={locations.map((location, index) => ({
                         latitude: location.coords.latitude,
@@ -57,14 +59,16 @@ export const RecordScreen = ({locations, mapRef}) => {
                         <Image source={require('../assets/current_location.png')} style={styles.marker}/>
                     </Marker>
                 ): ''}
-            </MapView>
+            </MapView></View>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     view: {
+        flex: 1,
         backgroundColor: Colors.background,
+        flexDirection: "column",
     },
     map: {
         width: '100%',
@@ -74,4 +78,7 @@ const styles = StyleSheet.create({
         width: 20,
         height: 20,
     },
+    text: {
+        fontSize: 24,
+    }
 });
