@@ -9,14 +9,19 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
     "expo": "~49.0.15",
+    "expo-dev-client": "^2.4.12",
+    "expo-location": "~16.1.0",
     "expo-status-bar": "~1.6.0",
+    "expo-task-manager": "~11.3.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.6.5",
     "react": "18.2.0",
     "react-native": "0.72.6",
-    "expo-dev-client": "^2.4.12",
-    "react-native-maps": "1.7.1",
-    "expo-location": "~16.1.0",
-    "expo-task-manager": "~11.3.0"
+    "react-native-maps": "1.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
