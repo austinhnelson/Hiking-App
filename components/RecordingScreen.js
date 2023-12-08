@@ -52,6 +52,7 @@ export const RecordScreen = ({route, setRoute, mapRef}) => {
 
     const saveRoute = () => {
         // TODO save route here
+        // reset locations
         alert('saved route');
         setRouteState('saved');
     };
@@ -143,5 +144,4 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 10,
     },
-
 });

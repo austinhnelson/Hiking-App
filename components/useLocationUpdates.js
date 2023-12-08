@@ -6,7 +6,6 @@ import {waitFor} from "@babel/core/lib/gensync-utils/async";
 
 export const useLocationUpdates = () => {
     const [locationUpdates, setLocationUpdates] = useState([]);
-
     useEffect(() => {
         TaskManager.defineTask('background_location_task', ({data: {locations: locationData}, error}) => {
             if (error) {
@@ -15,7 +14,6 @@ export const useLocationUpdates = () => {
             }
             setLocationUpdates(locationData);
         });
-        while(!TaskManager.isTaskDefined('background_location_task'));
         const requestPermissions = async () => {
             let {status} = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
@@ -23,6 +21,7 @@ export const useLocationUpdates = () => {
             } else {
                 const {status: backgroundStatus} = await Location.requestBackgroundPermissionsAsync();
                 if (backgroundStatus === 'granted') {
+                    console.log('Starting location updates')
                     await Location.startLocationUpdatesAsync('background_location_task', {
                         accuracy: Accuracy.BestForNavigation,
                         timeInterval: 500,
@@ -33,7 +32,20 @@ export const useLocationUpdates = () => {
             }
         };
 
-        requestPermissions();
+        const waitForReady = async () => {
+            while (!TaskManager.isTaskDefined('background_location_task') || !(await TaskManager.isAvailableAsync())) await waitFor(500);
+            console.log('Task is ready');
+        };
+
+        waitForReady().then(requestPermissions);
+        return async () => {
+            try {
+                console.log('Stopping location updates');
+                await Location.stopLocationUpdatesAsync('background_location_task');
+            } catch (error) {
+                console.error('Error stopping location updates:', error);
+            }
+        }
     }, []);
 
     return locationUpdates;
