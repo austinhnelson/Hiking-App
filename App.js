@@ -1,5 +1,5 @@
 import {SafeAreaView, StatusBar, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 //import * as RemoteAccess from './components/RemoteAccess';
 
@@ -10,6 +10,10 @@ import {HomeScreen} from "./components/HomeScreen";
 import {RecordScreen} from "./components/RecordingScreen";
 import {PersonalScreen} from "./components/PersonalScreen";
 import {SettingsScreen} from "./components/SettingsScreen";
+import {useLocationUpdates} from "./components/useLocationUpdates";
+import * as Location from "expo-location";
+import {Accuracy, ActivityType} from "expo-location";
+import * as TaskManager from "expo-task-manager";
 
 export default function App() {
     /*const clicked = () => {
@@ -21,12 +25,18 @@ export default function App() {
     };*/
 
     const [appState, setAppState] = useState('record');
+
+    const [currentRoute, setCurrentRoute] = useState([]);
+    const locationUpdates = useLocationUpdates();
+    useEffect(() => {
+        setCurrentRoute(prevState => prevState.concat(locationUpdates));
+    }, [locationUpdates]);
+
     const MyButton = ({text, onPress}) => (
         <TouchableHighlight style={styles.button} onPress={onPress}>
             <Text style={styles.text}>{text}</Text>
         </TouchableHighlight>
     );
-
 
 
     const renderTopBar = (
@@ -43,38 +53,38 @@ export default function App() {
         </View>
     );
 
-    const renderScreen = () => { 
-      switch(appState) {
-        case 'login':
-          return LoginScreen();
-        case 'home':
-            return HomeScreen();
-        case 'record':
-            return RecordScreen();
-        case 'personal':
-            return PersonalScreen();
-        case 'settings':
-            return SettingsScreen();
-        default: 
-          return null;
-      }
+    const renderScreen = () => {
+        switch (appState) {
+            case 'login':
+                return LoginScreen();
+            case 'home':
+                return HomeScreen();
+            case 'record':
+                return RecordScreen(currentRoute);
+            case 'personal':
+                return PersonalScreen();
+            case 'settings':
+                return SettingsScreen();
+            default:
+                return null;
+        }
     }
 
     return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar style="auto" />
-  
-        {/* Conditionally render TopBar only when the state is NOT 'login' */}
-        {appState !== 'login' && renderTopBar}
-  
-        <View style={styles.screen}>
-          {/* Render the screen based on the current state */}
-          {renderScreen()}
-        </View>
-  
-        {/* Conditionally render BottomBar only when the state is NOT 'login' */}
-        {appState !== 'login' && renderBottomBar}
-      </SafeAreaView>
+        <SafeAreaView style={styles.container}>
+            <StatusBar style="auto"/>
+
+            {/* Conditionally render TopBar only when the state is NOT 'login' */}
+            {appState !== 'login' && renderTopBar}
+
+            <View style={styles.screen}>
+                {/* Render the screen based on the current state */}
+                {renderScreen()}
+            </View>
+
+            {/* Conditionally render BottomBar only when the state is NOT 'login' */}
+            {appState !== 'login' && renderBottomBar}
+        </SafeAreaView>
     );
 }
 
