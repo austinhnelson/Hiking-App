@@ -1,5 +1,5 @@
-import {SafeAreaView, StatusBar, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
-import {useEffect, useState} from "react";
+import {Image, SafeAreaView, StatusBar, StyleSheet, TouchableHighlight, View} from 'react-native';
+import {useEffect, useRef, useState} from "react";
 
 //import * as RemoteAccess from './components/RemoteAccess';
 
@@ -11,9 +11,6 @@ import {RecordScreen} from "./components/RecordingScreen";
 import {PersonalScreen} from "./components/PersonalScreen";
 import {SettingsScreen} from "./components/SettingsScreen";
 import {useLocationUpdates} from "./components/useLocationUpdates";
-import * as Location from "expo-location";
-import {Accuracy, ActivityType} from "expo-location";
-import * as TaskManager from "expo-task-manager";
 
 export default function App() {
     /*const clicked = () => {
@@ -26,30 +23,31 @@ export default function App() {
 
     const [appState, setAppState] = useState('record');
 
+    const mapRef = useRef();
     const [currentRoute, setCurrentRoute] = useState([]);
     const locationUpdates = useLocationUpdates();
     useEffect(() => {
         setCurrentRoute(prevState => prevState.concat(locationUpdates));
     }, [locationUpdates]);
 
-    const MyButton = ({text, onPress}) => (
+    const MyButton = ({uri, onPress}) => (
         <TouchableHighlight style={styles.button} onPress={onPress}>
-            <Text style={styles.text}>{text}</Text>
+            <Image source={uri} style={styles.icon}/>
         </TouchableHighlight>
     );
 
 
     const renderTopBar = (
         <View style={[styles.buttonBar, {justifyContent: 'flex-end'}]}>
-            {MyButton({text: 'T1', onPress: () => setAppState('settings')})}
+            {MyButton({uri: require('./assets/settings_icon.png'), onPress: () => setAppState('settings')})}
         </View>
     );
 
     const renderBottomBar = (
         <View style={styles.buttonBar}>
-            {MyButton({text: 'B1', onPress: () => setAppState('home')})}
-            {MyButton({text: 'B2', onPress: () => setAppState('record')})}
-            {MyButton({text: 'B3', onPress: () => setAppState('personal')})}
+            {MyButton({uri: require('./assets/home_icon.png'), onPress: () => setAppState('home')})}
+            {MyButton({uri: require('./assets/record_icon.png'), onPress: () => setAppState('record')})}
+            {MyButton({uri: require('./assets/hamburger_icon.png'), onPress: () => setAppState('personal')})}
         </View>
     );
 
@@ -60,7 +58,7 @@ export default function App() {
             case 'home':
                 return HomeScreen();
             case 'record':
-                return RecordScreen(currentRoute);
+                return RecordScreen({locations: currentRoute, mapRef: mapRef});
             case 'personal':
                 return PersonalScreen();
             case 'settings':
@@ -98,9 +96,9 @@ const styles = StyleSheet.create({
         ...Buttons.smallRounded,
         backgroundColor: Colors.menuBar,
     },
-    text: {
-        color: Colors.black,
-        fontSize: 24,
+    icon: {
+        width: 30,
+        height: 30,
     },
     buttonBar: {
         flex: 1,
