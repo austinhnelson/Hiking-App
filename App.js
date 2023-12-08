@@ -1,5 +1,5 @@
-import {SafeAreaView, StatusBar, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
-import {useState} from "react";
+import {Image, SafeAreaView, StatusBar, StyleSheet, TouchableHighlight, View} from 'react-native';
+import {useEffect, useRef, useState} from "react";
 
 //import * as RemoteAccess from './components/RemoteAccess';
 
@@ -10,6 +10,7 @@ import {HomeScreen} from "./components/HomeScreen";
 import {RecordScreen} from "./components/RecordingScreen";
 import {PersonalScreen} from "./components/PersonalScreen";
 import {SettingsScreen} from "./components/SettingsScreen";
+import {useLocationUpdates} from "./components/useLocationUpdates";
 
 export default function App() {
     /*const clicked = () => {
@@ -20,61 +21,73 @@ export default function App() {
         //RemoteAccess.loadRoutesByUser('my name').then(value => console.log(value));
     };*/
 
-    const [appState, setAppState] = useState('login');
-    const MyButton = ({text, onPress}) => (
+    const [appState, setAppState] = useState('record');
+
+    const mapRef = useRef();
+    const [currentRoute, setCurrentRoute] = useState({state: '', locations: []});
+    const locationUpdates = useLocationUpdates();
+    useEffect(() => {
+        if (currentRoute.state === 'recording'){
+            setCurrentRoute(prevState => ({
+                state: prevState.state,
+                locations: prevState.locations.concat(locationUpdates)
+            }));
+        }
+    }, [locationUpdates]);
+
+    const MyButton = ({uri, onPress}) => (
         <TouchableHighlight style={styles.button} onPress={onPress}>
-            <Text style={styles.text}>{text}</Text>
+            <Image source={uri} style={styles.icon}/>
         </TouchableHighlight>
     );
 
 
-
     const renderTopBar = (
         <View style={[styles.buttonBar, {justifyContent: 'flex-end'}]}>
-            {MyButton({text: 'T1', onPress: () => setAppState('settings')})}
+            {MyButton({uri: require('./assets/settings_icon.png'), onPress: () => setAppState('settings')})}
         </View>
     );
 
     const renderBottomBar = (
         <View style={styles.buttonBar}>
-            {MyButton({text: 'B1', onPress: () => setAppState('home')})}
-            {MyButton({text: 'B2', onPress: () => setAppState('record')})}
-            {MyButton({text: 'B3', onPress: () => setAppState('personal')})}
+            {MyButton({uri: require('./assets/home_icon.png'), onPress: () => setAppState('home')})}
+            {MyButton({uri: require('./assets/record_icon.png'), onPress: () => setAppState('record')})}
+            {MyButton({uri: require('./assets/hamburger_icon.png'), onPress: () => setAppState('personal')})}
         </View>
     );
 
-    const renderScreen = () => { 
-      switch(appState) {
-        case 'login':
-          return LoginScreen();
-        case 'home':
-            return HomeScreen();
-        case 'record':
-            return RecordScreen();
-        case 'personal':
-            return PersonalScreen();
-        case 'settings':
-            return SettingsScreen();
-        default: 
-          return null;
-      }
+    const renderScreen = () => {
+        switch (appState) {
+            case 'login':
+                return LoginScreen();
+            case 'home':
+                return HomeScreen();
+            case 'record':
+                return RecordScreen({route: currentRoute, setRoute: setCurrentRoute, mapRef: mapRef});
+            case 'personal':
+                return PersonalScreen();
+            case 'settings':
+                return SettingsScreen();
+            default:
+                return null;
+        }
     }
 
     return (
-      <SafeAreaView style={styles.container}>
-        <StatusBar style="auto" />
-  
-        {/* Conditionally render TopBar only when the state is NOT 'login' */}
-        {appState !== 'login' && renderTopBar}
-  
-        <View style={styles.screen}>
-          {/* Render the screen based on the current state */}
-          {renderScreen()}
-        </View>
-  
-        {/* Conditionally render BottomBar only when the state is NOT 'login' */}
-        {appState !== 'login' && renderBottomBar}
-      </SafeAreaView>
+        <SafeAreaView style={styles.container}>
+            <StatusBar style="auto"/>
+
+            {/* Conditionally render TopBar only when the state is NOT 'login' */}
+            {appState !== 'login' && renderTopBar}
+
+            <View style={styles.screen}>
+                {/* Render the screen based on the current state */}
+                {renderScreen()}
+            </View>
+
+            {/* Conditionally render BottomBar only when the state is NOT 'login' */}
+            {appState !== 'login' && renderBottomBar}
+        </SafeAreaView>
     );
 }
 
@@ -88,9 +101,9 @@ const styles = StyleSheet.create({
         ...Buttons.smallRounded,
         backgroundColor: Colors.menuBar,
     },
-    text: {
-        color: Colors.black,
-        fontSize: 24,
+    icon: {
+        width: 30,
+        height: 30,
     },
     buttonBar: {
         flex: 1,
