@@ -24,10 +24,15 @@ export default function App() {
     const [appState, setAppState] = useState('record');
 
     const mapRef = useRef();
-    const [currentRoute, setCurrentRoute] = useState([]);
+    const [currentRoute, setCurrentRoute] = useState({state: '', locations: []});
     const locationUpdates = useLocationUpdates();
     useEffect(() => {
-        setCurrentRoute(prevState => prevState.concat(locationUpdates));
+        if (currentRoute.state === 'recording'){
+            setCurrentRoute(prevState => ({
+                state: prevState.state,
+                locations: prevState.locations.concat(locationUpdates)
+            }));
+        }
     }, [locationUpdates]);
 
     const MyButton = ({uri, onPress}) => (
@@ -58,7 +63,7 @@ export default function App() {
             case 'home':
                 return HomeScreen();
             case 'record':
-                return RecordScreen({locations: currentRoute, mapRef: mapRef});
+                return RecordScreen({route: currentRoute, setRoute: setCurrentRoute, mapRef: mapRef});
             case 'personal':
                 return PersonalScreen();
             case 'settings':
