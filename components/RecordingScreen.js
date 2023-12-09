@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import {Colors} from '../styles/index';
 import MapView, {Marker, Polyline} from "react-native-maps";
 
@@ -24,6 +24,8 @@ function calculateDistance(coords) {
     return distance;
 }
 
+let name;
+
 export const RecordScreen = ({route, setRoute, mapRef}) => {
     const locations = route.locations;
     let latestCoords;
@@ -47,40 +49,45 @@ export const RecordScreen = ({route, setRoute, mapRef}) => {
 
     const setRouteState = (state) => {
         setRoute({locations: locations, state: state});
-        if(state==='saving') saveRoute();
     };
 
-    const saveRoute = () => {
+    const saveRoute = (name, locations) => {
         // TODO save route here
-        // reset locations
-        alert('saved route');
-        setRouteState('saved');
+        alert('saved route: ' + name);
+        setRoute({locations: [], state: 'saved'});
     };
 
     const renderButton = () => {
         let button = null;
         if (route.state === '' || route.state === 'saved') {
             button = (
-                <TouchableOpacity style={styles.buttonContainer} onPress={() => {setRouteState('recording')}}>
+                <TouchableOpacity style={styles.buttonContainer} onPress={() => {
+                    setRouteState('recording')
+                }}>
                     <Image source={require('../assets/play_icon.png')} style={styles.icon}/>
                 </TouchableOpacity>
             );
-        } else if (route.state === 'recording'){
+        } else if (route.state === 'recording') {
             button = (
-                <TouchableOpacity style={styles.buttonContainer} onLongPress={() => {setRouteState('stopped')}}>
+                <TouchableOpacity style={styles.buttonContainer} onLongPress={() => {
+                    setRouteState('stopped')
+                }}>
                     <Image source={require('../assets/stop_icon.png')} style={styles.icon}/>
                 </TouchableOpacity>
             );
-        } else if (route.state === 'stopped'){
+        } else if (route.state === 'stopped') {
             button = (
-                <TouchableOpacity style={styles.buttonContainer} onLongPress={() => {setRouteState('saving')}}>
+                <TouchableOpacity style={styles.buttonContainer} onLongPress={() => {
+                    setRouteState('saving')
+                }}>
                     <Image source={require('../assets/save_icon.png')} style={styles.icon}/>
                 </TouchableOpacity>
             );
         }
         return button;
     };
-    return (
+
+    const renderMap = () => (
         <View style={styles.view}>
             <View style={{flex: 2}}>
                 <Text style={styles.text}>
@@ -112,6 +119,21 @@ export const RecordScreen = ({route, setRoute, mapRef}) => {
             {renderButton()}
         </View>
     );
+
+    const renderSaveDialog = () => {
+        return (
+            <View style={styles.dialog}>
+                <Text style={styles.text}>Route Name: </Text>
+                <TextInput style={styles.input} onChangeText={(text) => {name = text}}/>
+                <Pressable style={styles.buttonContainer} onPress={() => {saveRoute(name, locations)}}>
+                    <Text style={styles.text}>SAVE</Text>
+                </Pressable>
+            </View>
+        );
+    };
+
+    if(route.state === 'saving') return renderSaveDialog();
+    else return renderMap();
 }
 
 const styles = StyleSheet.create({
@@ -143,5 +165,15 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 10,
+    },
+    dialog: {
+        flex: 10,
+        width: '100%',
+        alignItems: 'center',
+    },
+    input:{
+        backgroundColor: '#fff',
+        width: '80%',
+        fontSize: 24,
     },
 });
