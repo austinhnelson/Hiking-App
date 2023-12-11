@@ -35,7 +35,7 @@ export const LoginScreen = () => {
       if (response.ok) {
         console.log("Login Successful");
       } else {
-        // Handle login failure
+        console.log("Login Failed");
       }
     } catch (error) {
       // Handle error
@@ -58,9 +58,9 @@ export const LoginScreen = () => {
       });
   
       if (response.ok) {
-        // Signup successful, handle accordingly
+        console.log("Signup Successful");
       } else {
-        // Handle signup failure
+        console.log("Signup Failed");
       }
     } catch (error) {
       // Handle error
