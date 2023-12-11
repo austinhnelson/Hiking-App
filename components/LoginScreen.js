@@ -21,7 +21,7 @@ export const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('your_backend_url/login', {
+      const response = await fetch('backend_url/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export const LoginScreen = () => {
   // For signup
   const handleSignup = async () => {
     try {
-      const response = await fetch('your_backend_url/signup', {
+      const response = await fetch('backend_url/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
