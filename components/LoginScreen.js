@@ -14,6 +14,60 @@ export const LoginScreen = () => {
     setMode("login");
   };
 
+  /**
+   * Handles the login for the database
+   * 
+   */
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('your_backend_url/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: enteredUsername,
+          password: enteredPassword,
+        }),
+      });
+  
+      if (response.ok) {
+        console.log("Login Successful");
+      } else {
+        // Handle login failure
+      }
+    } catch (error) {
+      // Handle error
+    }
+  };
+  
+  // For signup
+  const handleSignup = async () => {
+    try {
+      const response = await fetch('your_backend_url/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: enteredUsername,
+          password: enteredPassword,
+          email: enteredEmail,
+        }),
+      });
+  
+      if (response.ok) {
+        // Signup successful, handle accordingly
+      } else {
+        // Handle signup failure
+      }
+    } catch (error) {
+      // Handle error
+    }
+  };
+  
+
   const handleSignupView = () => {
     setMode("signup");
   };
