@@ -6,7 +6,9 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import rest.models.MapRoute;
 import rest.models.UserPost;
+import rest.models.User;
 import com.google.gson.Gson;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -22,13 +24,65 @@ public class App {
         connectionSource.setUsername("developer");
         connectionSource.setPassword("bE5OgL69GkQ0");
 
+        Dao<User, Integer> userDao = DaoManager.createDao(connectionSource, User.class);
         Dao<UserPost, Integer> userPostDao = DaoManager.createDao(connectionSource, UserPost.class);
         Dao<MapRoute, Integer> routeDao = DaoManager.createDao(connectionSource, MapRoute.class);
-
+        
+        TableUtils.createTableIfNotExists(connectionSource, User.class);
         TableUtils.createTableIfNotExists(connectionSource, UserPost.class);
         TableUtils.createTableIfNotExists(connectionSource, MapRoute.class);
 
         Gson gson = new Gson();
+
+        post("/signup", (req, res) -> {
+            String username = req.queryParams("username");
+            String password = req.queryParams("password");
+            String email = req.queryParams("email");
+
+            
+            List<User> existingUsers = userDao.queryBuilder()
+                    .where().eq("username", username)
+                    .or().eq("email", email)
+                    .query();
+
+            if (!existingUsers.isEmpty()) {
+                res.status(409); 
+                return "Username or email is already registered.";
+            }
+
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(hashedPassword);
+            user.setEmail(email);
+
+            userDao.create(user);
+            res.status(201); 
+            return "User created successfully.";
+        });
+
+        
+        post("/login", (req, res) -> {
+            String username = req.queryParams("username");
+            String password = req.queryParams("password");
+
+            
+            User user = userDao.queryBuilder()
+                    .where().eq("username", username)
+                    .queryForFirst();
+
+            if (user != null && BCrypt.checkpw(password, user.getPassword())) {
+               
+                res.status(200); 
+                return "Login successful.";
+            } else {
+                
+                res.status(401); 
+                return "Invalid username or password.";
+            }
+        });
+        
 
         post("/userPost", (req, res) -> {
             String username = req.queryParams("username");

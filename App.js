@@ -29,6 +29,7 @@ export default function App() {
     };*/
 
   const [appState, setAppState] = useState("home");
+  //const [appState, setAppState] = useState("login");
 
   const mapRef = useRef();
   const [currentRoute, setCurrentRoute] = useState({
@@ -81,8 +82,10 @@ export default function App() {
     switch (appState) {
       case "login":
         return LoginScreen();
+        //return <LoginScreen setAppState={setAppState} />;
       case "home":
         return HomeScreen();
+        //return <LoginScreen setAppState={setAppState} />;
       case "record":
         return RecordScreen({
           route: currentRoute,

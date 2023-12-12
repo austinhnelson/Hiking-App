@@ -9,10 +9,70 @@ import {
 
 export const LoginScreen = () => {
   const [mode, setMode] = useState("login");
+  const [enteredUsername, setEnteredUsername] = useState("");
+  const [enteredPassword, setEnteredPassword] = useState("");
+  const [enteredEmail, setEnteredEmail] = useState("");
 
   const handleLoginView = () => {
     setMode("login");
   };
+
+  /**
+   * Handles the login for the database
+   * 
+   */
+
+  const handleLogin = async () => {
+    try {
+      const response = await fetch('http://172.232.171.163:4567/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: enteredUsername,
+          password: enteredPassword,
+        }),
+      });
+  
+      if (response.ok) {
+        console.log("Login Successful");
+      } else {
+        console.log("Login Failed");
+      }
+    } catch (error) {
+      console.error("Login Error: ", error);
+    }
+  };
+  
+  /**
+   * Handles the signup for the database
+   * 
+   */
+  const handleSignup = async () => {
+    try {
+      const response = await fetch('http://172.232.171.163:4567/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: enteredUsername,
+          password: enteredPassword,
+          email: enteredEmail,
+        }),
+      });
+  
+      if (response.ok) {
+        console.log("Signup Successful");
+      } else {
+        console.log("Signup Failed");
+      }
+    } catch (error) {
+      console.error("Signup Error: ", error);
+    }
+  };
+  
 
   const handleSignupView = () => {
     setMode("signup");
@@ -23,14 +83,23 @@ export const LoginScreen = () => {
       return (
         <>
           <Text style={styles.inputTitle}>Username</Text>
-          <TextInput style={styles.input} />
+          <TextInput 
+            style={styles.input} 
+            onChangeText={setEnteredUsername} 
+            value={enteredUsername}
+          />
 
           <Text style={styles.inputTitle}>Password</Text>
-          <TextInput style={styles.input} secureTextEntry={true} />
+          <TextInput 
+            style={styles.input} 
+            secureTextEntry={true} 
+            onChangeText={setEnteredPassword} 
+            value={enteredPassword}
+          />
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => console.log("Login pressed")}
+            onPress={handleLogin}
           >
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
@@ -40,14 +109,30 @@ export const LoginScreen = () => {
       return (
         <>
           <Text style={styles.inputTitle}>Signup Username</Text>
-          <TextInput style={styles.input} />
+          <TextInput 
+            style={styles.input} 
+            onChangeText={setEnteredUsername} 
+            value={enteredUsername}
+          />
 
           <Text style={styles.inputTitle}>Signup Password</Text>
-          <TextInput style={styles.input} secureTextEntry={true} />
+          <TextInput 
+            style={styles.input} 
+            secureTextEntry={true} 
+            onChangeText={setEnteredPassword} 
+            value={enteredPassword}
+          />
+
+          <Text style={styles.inputTitle}>Email</Text>
+          <TextInput 
+            style={styles.input} 
+            onChangeText={setEnteredEmail} 
+            value={enteredEmail}
+          />
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => console.log("Login pressed")}
+            onPress={handleSignup}
           >
             <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>

@@ -37,3 +37,9 @@ yarn-error.*
 
 .idea/
 /%ProgramData%/
+.vscode/settings.json
+
+databaseAPI/target/classes/rest/App.class
+databaseAPI/target/classes/rest/models/MapRoute.class
+databaseAPI/target/classes/rest/models/UserPost.class
+.gitignore
