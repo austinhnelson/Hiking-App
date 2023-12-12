@@ -9,6 +9,9 @@ import {
 
 export const LoginScreen = () => {
   const [mode, setMode] = useState("login");
+  const [enteredUsername, setEnteredUsername] = useState("");
+  const [enteredPassword, setEnteredPassword] = useState("");
+  const [enteredEmail, setEnteredEmail] = useState("");
 
   const handleLoginView = () => {
     setMode("login");
@@ -21,7 +24,7 @@ export const LoginScreen = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch('backend_url/login', {
+      const response = await fetch('http://172.232.171.163:4567/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -38,14 +41,17 @@ export const LoginScreen = () => {
         console.log("Login Failed");
       }
     } catch (error) {
-      // Handle error
+      console.error("Login Error: ", error);
     }
   };
   
-  // For signup
+  /**
+   * Handles the signup for the database
+   * 
+   */
   const handleSignup = async () => {
     try {
-      const response = await fetch('backend_url/signup', {
+      const response = await fetch('http://172.232.171.163:4567/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +69,7 @@ export const LoginScreen = () => {
         console.log("Signup Failed");
       }
     } catch (error) {
-      // Handle error
+      console.error("Signup Error: ", error);
     }
   };
   
@@ -77,14 +83,23 @@ export const LoginScreen = () => {
       return (
         <>
           <Text style={styles.inputTitle}>Username</Text>
-          <TextInput style={styles.input} />
+          <TextInput 
+            style={styles.input} 
+            onChangeText={setEnteredUsername} 
+            value={enteredUsername}
+          />
 
           <Text style={styles.inputTitle}>Password</Text>
-          <TextInput style={styles.input} secureTextEntry={true} />
+          <TextInput 
+            style={styles.input} 
+            secureTextEntry={true} 
+            onChangeText={setEnteredPassword} 
+            value={enteredPassword}
+          />
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => console.log("Login pressed")}
+            onPress={handleLogin}
           >
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
@@ -94,14 +109,30 @@ export const LoginScreen = () => {
       return (
         <>
           <Text style={styles.inputTitle}>Signup Username</Text>
-          <TextInput style={styles.input} />
+          <TextInput 
+            style={styles.input} 
+            onChangeText={setEnteredUsername} 
+            value={enteredUsername}
+          />
 
           <Text style={styles.inputTitle}>Signup Password</Text>
-          <TextInput style={styles.input} secureTextEntry={true} />
+          <TextInput 
+            style={styles.input} 
+            secureTextEntry={true} 
+            onChangeText={setEnteredPassword} 
+            value={enteredPassword}
+          />
+
+          <Text style={styles.inputTitle}>Email</Text>
+          <TextInput 
+            style={styles.input} 
+            onChangeText={setEnteredEmail} 
+            value={enteredEmail}
+          />
 
           <TouchableOpacity
             style={styles.button}
-            onPress={() => console.log("Login pressed")}
+            onPress={handleSignup}
           >
             <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>
