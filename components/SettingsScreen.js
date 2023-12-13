@@ -11,6 +11,23 @@ export const SettingsScreen = () => {
     numberOfFriends: 10,
     totalActivity: 100,
   };
+
+
+  /**
+   * Handles the user logout when the button is pressed. 
+   * 
+   */
+  const handleLogout = () => {
+
+    console.log("User logged out");
+
+
+    if (setAppState) {
+      setAppState("login");
+    }
+  };
+
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>

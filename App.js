@@ -81,11 +81,11 @@ export default function App() {
   const renderScreen = () => {
     switch (appState) {
       case "login":
-        return LoginScreen();
-        //return <LoginScreen setAppState={setAppState} />;
+        //return LoginScreen();
+        return <LoginScreen setAppState={setAppState} />;
       case "home":
-        return HomeScreen();
-        //return <LoginScreen setAppState={setAppState} />;
+        //return HomeScreen();
+        return <HomeScreen setAppState={setAppState} />;
       case "record":
         return RecordScreen({
           route: currentRoute,
@@ -93,9 +93,11 @@ export default function App() {
           mapRef: mapRef,
         });
       case "personal":
-        return PersonalScreen();
+        //return PersonalScreen();
+        return <PersonalScreen setAppState={setAppState} />;
       case "settings":
-        return SettingsScreen();
+        //return SettingsScreen();
+        return <SettingsScreen setAppState={setAppState} />;
       default:
         return null;
     }
