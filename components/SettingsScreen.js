@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { Colors } from "../styles/index";
 
-export const SettingsScreen = () => {
+export const SettingsScreen = ({setAppState}) => {
   const personalDetailsValues = {
     username: "JohnDoe",
     password: "********",

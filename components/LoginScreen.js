@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
+import {Colors} from "../styles";
 
 export const LoginScreen = () => {
   const [mode, setMode] = useState("login");
@@ -143,7 +144,7 @@ export const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Hiking Log App</Text>
+      <Text style={styles.title}>Trail Tracker</Text>
 
       <View style={styles.loginContainer}>
         <TouchableOpacity
@@ -171,6 +172,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: Colors.background,
   },
   title: {
     fontSize: 40,
@@ -182,14 +184,13 @@ const styles = StyleSheet.create({
   },
   loginBox: {
     flex: 1,
-    backgroundColor: "lightgray",
     padding: 10,
   },
   loginLeft: {
-    backgroundColor: "#343B3E",
+    backgroundColor: Colors.menuBar,
   },
   loginRight: {
-    backgroundColor: "#82969E",
+    backgroundColor: Colors.accent,
   },
   loginText: {
     fontSize: 30,
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#D9D9D9",
   },
   button: {
-    backgroundColor: "#82969E", // Green color (adjust as needed)
+    backgroundColor: Colors.menuOption, // Green color (adjust as needed)
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
